@@ -8,13 +8,26 @@ class ManagementUtil():
     """
     def __init__(self):
         self.argv = sys.argv
+
+    def add_intern_commands(self, parser):
+        parser.add_argument('--command', help='Top level command')
         
+
     def run(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('--verbose', nargs='?',help='verbose' )
-        parser.add_argument('command', nargs='*')
-        parser.add_argument('-v', '--verbosex', help='Show verbose information')
-        parser.parse_args()
+        self.add_intern_commands(parser)
+        commands_dict = None
+        try:
+            commands_dict = vars(parser.parse_args(self.argv[1:]))
+        except:                 # Catch sys exit
+            pass
+
+        if len(self.argv) < 2:
+            parser.print_help()
+
+        print(commands_dict)
+        
+            
 
 
 def run_commands():
