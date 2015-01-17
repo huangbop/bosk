@@ -1,6 +1,35 @@
 import os
 import sys
-import argparse
+from argparse import ArgumentParser
+
+
+def find_extern_commands(management_dir):
+    """
+    List the names in management/commands, without .py
+    """
+    commands_dir = os.path.join(management_dir, 'commands')
+    try:
+        pass
+    except OSError:
+        return []
+    
+    
+
+    
+
+
+
+
+class BoskArgumentParser(ArgumentParser):
+    """
+    Print external commands
+    """
+        
+    def print_help(self):
+        ArgumentParser.print_help(self)
+        print('\nI stand here')
+        
+
 
 class ManagementUtil():
     """
@@ -8,28 +37,15 @@ class ManagementUtil():
     """
     def __init__(self):
         self.argv = sys.argv
-
-    def add_intern_commands(self, parser):
-        parser.add_argument('--command', help='Top level command')
         
-
+        
     def run(self):
-        parser = argparse.ArgumentParser()
-        self.add_intern_commands(parser)
-        commands_dict = None
-        try:
-            commands_dict = vars(parser.parse_args(self.argv[1:]))
-        except:                 # Catch sys exit
-            pass
+        parser = BoskArgumentParser()
+        parser.add_argument('command', help='Bosk top level commnad')
+        parser.add_argument('-v', '--verbose', help='Show verbose information')
+        command_dict = vars(parser.parse_args(self.argv[1:]))
 
-        if len(self.argv) < 2:
-            parser.print_help()
-
-        print(commands_dict)
-        
             
-
-
 def run_commands():
     util = ManagementUtil()
     util.run()
