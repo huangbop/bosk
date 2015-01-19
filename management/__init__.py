@@ -2,6 +2,7 @@ import os
 import sys
 from argparse import ArgumentParser
 import collections
+import importlib
 
 
 def get_extern_commands_dict(management_dir):
@@ -13,7 +14,7 @@ def get_extern_commands_dict(management_dir):
     commands_dir = os.path.join(management_dir, 'commands')
     try:
         commands =  [f[:-3] for f in os.listdir(commands_dir)
-                     if not f.startswith('-') and f.endswith('.py')]
+                     if not f.startswith('_') and f.endswith('.py')]
         # This commands are all in management app
         return {cmd: 'management' for cmd in commands}
         
@@ -62,7 +63,7 @@ class ManagementUtil():
         parser.add_argument('-v', '--verbose', help='Show verbose information')
         parse_dict = vars(parser.parse_args(self.argv[1:]))
 
-        self.fetch_command(parse_dict['command']).run_from_argv(self.argv)
+        self.fetch_command(parse_dict['command']).run(self.argv)
 
 
     def fetch_command(self, command):
@@ -73,7 +74,8 @@ class ManagementUtil():
             sys.stderr.write("Unknown command: %s\n" % command)
             sys.exit(1)
 
-        print('I will work here.\n')
+        mod = importlib.import_module('bosk.management.commands.%s' % command)
+        return mod.Command()
 
             
 def run_commands():
