@@ -62,7 +62,7 @@ class ManagementUtil():
         parser.add_argument('command', help='Bosk top level commnad')
         parser.add_argument('-v', '--verbose', help='Show verbose information')
         parse_dict = vars(parser.parse_args(self.argv[1:]))
-
+        
         self.fetch_command(parse_dict['command']).run(**parse_dict)
 
 
