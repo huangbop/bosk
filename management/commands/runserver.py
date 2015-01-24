@@ -3,11 +3,24 @@ import sys
 import subprocess
 import time
 from threading import Thread
+from wsgiref import simple_server
 
+
+def application(environ, start_response):
+    """
+    """
+    start_response('200 OK', [])
+    
+    return [b'xxx']
 
 def start_serve():
-    for i in range(10):
-        print(i)
+
+    httpd = simple_server.WSGIServer(('', 8000), simple_server.WSGIRequestHandler)
+
+    httpd.set_app(application)
+
+    httpd.serve_forever()
+    
 
 
 
